@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Ionic OCR-ALPR
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-img [src]="image"></ion-img>
+  
+  <ion-button expand="full" (click)="captureImage()">Capture Image</ion-button>
+  <ion-button expand="full" (click)="sendImage()">Send Image</ion-button>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        {{result}}
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+</ion-content>
