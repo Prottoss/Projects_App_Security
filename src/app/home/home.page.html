@@ -7,10 +7,23 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-img [src]="image"></ion-img>
+  <h3 *ngIf="images.length == 0">Please Select Image</h3>
+  <ion-list>
+    <ion-item *ngFor="let file of images;let i = index">
+      <ion-img [src]="file.data"></ion-img>
+      <ion-button slot="end" fill="clear" (click)="sendImage(file)">
+        <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+      </ion-button>
+      <ion-button slot="end" fill="clear" (click)="deleteImage(file)">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  
   
   <ion-button expand="full" (click)="captureImage()">Capture Image</ion-button>
-  <ion-button expand="full" (click)="sendImage()">Send Image</ion-button>
+  <!-- <ion-button expand="full" (click)="sendImage()">Send Image</ion-button> -->
 
   <ion-card>
     <ion-card-header>

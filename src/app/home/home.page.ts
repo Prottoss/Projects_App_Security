@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Camera, CameraResultType, CameraSource, Photo } from "@capacitor/camera";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Filesystem } from '@capacitor/filesystem';
-import { Directory } from '@capacitor/filesystem/dist/esm/definitions';
+import { Directory, FileInfo } from '@capacitor/filesystem/dist/esm/definitions';
 import { readBlobAsBase64 } from '@capacitor/core/types/core-plugins';
 import { LoadingController, Platform } from '@ionic/angular';
+import { Form } from '@angular/forms';
+import { finalize } from 'rxjs';
 
 const IMAGE_DIR = "stored-images";
 
@@ -21,8 +23,6 @@ interface userImage{
 })
 export class HomePage implements OnInit {
   
-  //image = "https://licenseplatemania.com/fotos/ierland/ierland70.jpg";
-  image!: any;
   images: userImage[] = [];
   
   //api details
@@ -35,68 +35,71 @@ export class HomePage implements OnInit {
   constructor(private http: HttpClient, private platform: Platform, private loadingCtrl: LoadingController){}
 
   async ngOnInit(){
-    //this.loadFiles();
+    this.loadFiles();
   }
 
-  // async loadFiles()
-  // {
-  //   //this.images;
+  async loadFiles()
+  {
+    this.images = [];
 
-  //   const loading = await this.loadingCtrl.create({
-  //     message: "Loading data...",
-  //   });
-  //   await loading.present();
+    const loading = await this.loadingCtrl.create({
+      message: "Loading data...",
+    });
+    await loading.present();
 
-  //   Filesystem.readdir({
-  //     directory: Directory.Data,
-  //     path: IMAGE_DIR
-  //   }).then(result => {
-  //     console.log("HERE: ", result);
-  //     this.loadFileData(result.files);
-  //   }, async err => {
-  //     console.log("err: ",err);
-  //     await Filesystem.mkdir({
-  //       directory: Directory.Data,
-  //       path: IMAGE_DIR
-  //     });
-  //   }).then(_ => {
-  //     loading.dismiss();
-  //   })
-  // }
+    Filesystem.readdir({
+      directory: Directory.Data,
+      path: IMAGE_DIR
+    }).then(result => {
 
-  // async loadFileData(fileNames: any){
-  //   for (let f of fileNames){
-  //     const filePath = `${IMAGE_DIR}/${f}`;
+      console.log("HERE: ", result);
+      this.loadFileData(result.files);
 
-  //     const readFile = await Filesystem.readFile({
-  //       directory: Directory.Data,
-  //       path: filePath
-  //     });
+    }, async err => {
+      console.log("err: ",err);
+      await Filesystem.mkdir({
+        directory: Directory.Data,
+        path: IMAGE_DIR
+      });
+    }).then(_ => {
+      loading.dismiss();
+    })
+  }
 
-  //     this.images.push({
-  //       name: f,
-  //       path: filePath,
-  //       data: `data:image/jpeg;base64,${readFile.data}`
-  //     })
-  //     console.log("READ: ",readFile);
-  //   }
-  // }
+  async loadFileData(fileNames: any[]){
+    for (let f of fileNames){
+      const filePath = `${IMAGE_DIR}/${f.name}`;
+      console.log("HERE2: ",f);
+      
+
+      const readFile = await Filesystem.readFile({
+        directory: Directory.Data,
+        path: filePath
+      });
+
+      this.images.push({
+        name: f.name,
+        path: filePath,
+        data: `data:image/jpeg;base64,${readFile.data}`
+      })
+      console.log("READ: ",readFile);
+    }
+  }
 
   async captureImage(){
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: true,
-      resultType: CameraResultType.Uri,
+      resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera
     });
-    console.log("image: ", image);
+    console.log("image: ", image.dataUrl);
 
-    if (image){
-      this.saveImage(image);
-    }
-    
-    //convert image to file
-    this.image = image.dataUrl; // file is the image
+    this.uploadData(image);
+
+    // if (image){
+    //   this.saveImage(image);
+    // }
   }
 
   //saves image
@@ -112,33 +115,27 @@ export class HomePage implements OnInit {
       data: base64Data
     });
     console.log("saved: ", savedFile);
-    //this.loadFiles();
+    this.loadFiles();
   }
 
-  //Sends image to API
-  async sendImage()
+  async sendImage(file: userImage)
   {
-    const headers = new HttpHeaders()
-      .set('content-type', 'application/json')
-      .set("Authorization", this.token);
-
-    const body = {
-      "regions": ["ie","gb"],
-      "upload": this.image
-    }
-
-    this.http.post(this.apiUrl,body,{headers:headers})
-    .subscribe((res:any)=>{
-      console.log(res.results[0]["plate"]);
-      this.result = res.results[0]["plate"];
-    }); 
+    const response = await fetch(file.data);
+    console.log("READ3",response);
+    //const blob = await response.blob();
+    //console.log("READ4",blob);
+    const formData = new FormData();
+    formData.append("upload",file.data);
+    formData.append("regions","ie");
+    this.uploadData(formData);
+    //this.uploadData(response);
   }
 
 //Helper functions
 async readAsBase64(photo: Photo){
   if(this.platform.is("hybrid")){
     const file = await Filesystem.readFile({
-      path: photo.path!
+      path: photo.path as string
     });
 
     return file.data;
@@ -159,7 +156,46 @@ convertBlobToBase64 = (blob:Blob) => new Promise((resolve,reject) =>{
   reader.readAsDataURL(blob);
 });
 
+async uploadData(image: any){
+  const loading = await this.loadingCtrl.create({
+    message: "Uploading...",
+  });
+  await loading.present();
 
+  console.log("IMAGEUPLOAD",image);
   
+  const headers = new HttpHeaders()
+      //.set('content-type', 'multipart/form-data')
+      .set("Authorization", this.token);
 
+    // const body = {
+    //   "regions": ["ie","gb"],
+    //   "upload": image
+    // }
+
+    const body = new FormData();
+    body.append("upload",image.dataUrl);
+    body.append("regions","ie,gb");
+
+    this.http.post(this.apiUrl,body,{headers:headers}).pipe(
+      finalize(() => {
+        loading.dismiss();
+      })
+    ).subscribe((res:any)=>{
+      console.log(res.results[0]["plate"]);
+      this.result = res.results[0]["plate"];
+    }); 
+
+
+}
+
+async deleteImage(file:userImage)
+{
+  await Filesystem.deleteFile({
+    directory: Directory.Data,
+    path: file.path
+  });
+  this.loadFiles();
+
+}
 }
