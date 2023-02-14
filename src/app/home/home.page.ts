@@ -82,24 +82,24 @@ export class HomePage implements OnInit {
         path: filePath,
         data: `data:image/jpeg;base64,${readFile.data}`
       })
-      console.log("READ: ",readFile);
+      console.log("READ: ",readFile.data);
     }
   }
 
   async captureImage(){
     const image = await Camera.getPhoto({
-      quality: 90,
+      quality: 40,
       allowEditing: true,
-      resultType: CameraResultType.DataUrl,
+      resultType: CameraResultType.Uri,
       source: CameraSource.Camera
     });
-    console.log("image: ", image.dataUrl);
+    //console.log("image: ", image.dataUrl);
 
-    this.uploadData(image);
+    //this.uploadData(image);
 
-    // if (image){
-    //   this.saveImage(image);
-    // }
+    if (image){
+      this.saveImage(image);
+    }
   }
 
   //saves image
@@ -122,13 +122,15 @@ export class HomePage implements OnInit {
   {
     const response = await fetch(file.data);
     console.log("READ3",response);
-    //const blob = await response.blob();
+    const blob = await response.blob();
     //console.log("READ4",blob);
     const formData = new FormData();
     formData.append("upload",file.data);
     formData.append("regions","ie");
-    this.uploadData(formData);
-    //this.uploadData(response);
+    console.log("UPLOADRDY: ",file.data);
+    
+    //this.uploadData(formData);
+    this.uploadData(file);
   }
 
 //Helper functions
@@ -162,20 +164,22 @@ async uploadData(image: any){
   });
   await loading.present();
 
-  console.log("IMAGEUPLOAD",image);
+  console.log("IMAGEUPLOAD",image.data);
   
   const headers = new HttpHeaders()
-      //.set('content-type', 'multipart/form-data')
+      .set('content-type', 'application/json')
+      //.set("Access-Control-Allow-Origin","*")
+      //.set("Access-Control-Request-Method","method")
       .set("Authorization", this.token);
 
-    // const body = {
-    //   "regions": ["ie","gb"],
-    //   "upload": image
-    // }
+    const body = {
+      "regions": ["ie","gb"],
+      "upload": image.data
+    }
 
-    const body = new FormData();
-    body.append("upload",image.dataUrl);
-    body.append("regions","ie,gb");
+    // const body = new FormData();
+    // body.append("upload",image);
+    // body.append("regions","ie,gb");
 
     this.http.post(this.apiUrl,body,{headers:headers}).pipe(
       finalize(() => {
