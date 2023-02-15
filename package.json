@@ -31,7 +31,6 @@
     "@ionic/angular": "^6.1.9",
     "@ionic/pwa-elements": "^3.1.1",
     "capacitor": "^0.0.3",
-    "cordova-plugin-mobile-ocr": "^3.1.2",
     "ionicons": "^6.0.3",
     "rxjs": "~7.5.0",
     "tesseract.js": "^4.0.2",
