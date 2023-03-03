@@ -1,35 +1,49 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Ionic OCR-ALPR
+      ParkIT Security
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h3 *ngIf="images.length == 0">Please Select Image</h3>
+  <h3 *ngIf="imageService.images.length == 0">No images...</h3>
   <ion-list>
-    <ion-item *ngFor="let file of images;let i = index">
-      <ion-img [src]="file.data"></ion-img>
-      <ion-button slot="end" fill="clear" (click)="sendImage(file)">
-        <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
-      </ion-button>
-      <ion-button slot="end" fill="clear" (click)="deleteImage(file)">
-        <ion-icon slot="icon-only" name="trash"></ion-icon>
-      </ion-button>
-    </ion-item>
+    <ion-item-sliding *ngFor="let file of imageService.images;let i = index">
+      <ion-item>
+          <ion-img [src]="file.data"></ion-img>
+        <ion-button slot="end" fill="clear" (click)="imageService.sendImage(file)">
+          <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+        </ion-button>
+      </ion-item>
+      
+      <ion-item-options>
+        <ion-item-option color="danger" (click)="imageService.deleteImage(file)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
-
-  
-  
-  <ion-button expand="full" (click)="captureImage()">Capture Image</ion-button>
-  <!-- <ion-button expand="full" (click)="sendImage()">Send Image</ion-button> -->
 
   <ion-card>
     <ion-card-header>
       <ion-card-title>
-        {{result}}
+        API: {{this.imageService.result}}
+      </ion-card-title>
+      <ion-card-title *ngIf="this.dService.carFound==null">
+        Vehicle not found
+      </ion-card-title>
+      <ion-card-title *ngIf="this.dService.carFound!=null">
+        {{this.dService.carFound}}
       </ion-card-title>
     </ion-card-header>
   </ion-card>
+  <ion-fab slot="fixed" horizontal="end" vertical="bottom">
+    <ion-fab-button (click)="imageService.captureImage()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
+
+
+
