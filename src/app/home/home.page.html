@@ -25,18 +25,24 @@
     </ion-item-sliding>
   </ion-list>
 
-  <ion-card>
+  <ion-card *ngIf="this.dService.carFound==null">
+    <ion-card-header>
+      <ion-card-title>
+        Vehicle not found
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <ion-card *ngIf="this.dService.carFound!=null">
     <ion-card-header>
       <ion-card-title>
         API: {{this.imageService.result}}
       </ion-card-title>
-      <ion-card-title *ngIf="this.dService.carFound==null">
-        Vehicle not found
-      </ion-card-title>
-      <ion-card-title *ngIf="this.dService.carFound!=null">
-        {{this.dService.carFound}}
-      </ion-card-title>
     </ion-card-header>
+    <ion-card-content>
+      Reg: {{this.dService.carFound}}
+      <br>
+      Owner:{{this.dService.carOwner.email}}
+    </ion-card-content>
   </ion-card>
   <ion-fab slot="fixed" horizontal="end" vertical="bottom">
     <ion-fab-button (click)="imageService.captureImage()">

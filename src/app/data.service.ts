@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +8,8 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 export class DataService {
 
   carFound:any;
+  carOwner: any;
+  ticket: any;
 
   constructor(private db: AngularFireDatabase) { }
 
@@ -17,6 +20,8 @@ export class DataService {
   async findVehicleInDb(reg:any)
   {
     this.carFound = null;
+    this.carOwner = null;
+
     await this.getUsers().valueChanges().subscribe((res: any)=>{
       for(let user of res)
       {
@@ -24,12 +29,16 @@ export class DataService {
         {
           if(car==reg){
             this.carFound = car;
+            this.carOwner = user;
           }
         } 
       }
 
       if(this.carFound!=null){
         console.log("Vehicle found: ", this.carFound);
+        console.log("owner ",this.carOwner.email);
+        
+        this.findUserTicket(this.carOwner.uid);
         //return carFound;
       }
       else{
@@ -39,7 +48,7 @@ export class DataService {
     });
   }
 
-  async findUserTicket(){
-
+  async findUserTicket(uid: any) {
+    this.db.object("users/"+uid+"/tickets/");
   }
 }
