@@ -8,19 +8,12 @@ import { finalize } from 'rxjs';
 import { DataService } from './data.service';
 
 const IMAGE_DIR = "stored-images";
-
-interface userImage{
-  name: string;
-  path: string;
-  data: string;
-};
-
 @Injectable({
   providedIn: 'root'
 })
 export class ImageService {
 
-  images: userImage[] = [];
+  images: any;
   
   //api details
   apiUrl = "https://api.platerecognizer.com/v1/plate-reader/";
@@ -46,11 +39,9 @@ export class ImageService {
       directory: Directory.Data,
       path: IMAGE_DIR
     }).then(result => {
-
-      //console.log("HERE: ", result);
       this.loadFileData(result.files);
-
-    }, async err => {
+    }, 
+    async err => {
       console.log("err: ",err);
       await Filesystem.mkdir({
         directory: Directory.Data,
@@ -75,7 +66,6 @@ export class ImageService {
         path: filePath,
         data: `data:image/jpeg;base64,${readFile.data}`
       })
-      //console.log("READ: ",readFile.data);
     }
   }
 
@@ -97,19 +87,17 @@ export class ImageService {
   async saveImage(photo:Photo)
   {
     const base64Data = await this.readAsBase64(photo);
-    //console.log(base64Data);
-    
     const fileName = new Date().getTime()+".jpeg";
-    const savedFile = await Filesystem.writeFile({
+
+    await Filesystem.writeFile({
       directory: Directory.Data,
       path: `${IMAGE_DIR}/${fileName}`,
       data: base64Data
     });
-    //console.log("saved: ", savedFile);
     this.loadFiles();
   }
 
-  async sendImage(image: userImage) {
+  async sendImage(image: any) {
     const loading = await this.loadingCtrl.create({
       message: "Uploading...",
     });
@@ -134,12 +122,11 @@ export class ImageService {
         this.result = res.results[0]["plate"];
        // this.deleteImage(image);
         this.dataService.findVehicleInDb(this.result)
-      }
-      
+      } 
     });
   }
 
-  async deleteImage(file:userImage)
+  async deleteImage(file: any)
   {
     await Filesystem.deleteFile({
       directory: Directory.Data,

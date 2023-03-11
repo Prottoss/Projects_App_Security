@@ -28,9 +28,12 @@
   <ion-card *ngIf="this.dService.carFound==null">
     <ion-card-header>
       <ion-card-title>
-        Vehicle not found
+        API: {{this.imageService.result}}
       </ion-card-title>
     </ion-card-header>
+    <ion-card-content>
+      Vehicle not found...
+    </ion-card-content>
   </ion-card>
   <ion-card *ngIf="this.dService.carFound!=null">
     <ion-card-header>
