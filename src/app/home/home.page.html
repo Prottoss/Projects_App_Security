@@ -26,6 +26,7 @@
   </ion-list>
 
   <ion-card *ngIf="this.dService.carFound==null">
+    <ion-icon name="close-circle-outline"></ion-icon>
     <ion-card-header>
       <ion-card-title>
         API: {{this.imageService.result}}
@@ -36,6 +37,7 @@
     </ion-card-content>
   </ion-card>
   <ion-card *ngIf="this.dService.carFound!=null">
+    <ion-icon name="checkmark-circle-outline"></ion-icon>
     <ion-card-header>
       <ion-card-title>
         API: {{this.imageService.result}}
@@ -45,6 +47,12 @@
       Reg: {{this.dService.carFound}}
       <br>
       Owner:{{this.dService.carOwner.email}}
+      <ion-item *ngIf="this.dService.validTicket">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+      </ion-item>
+      <ion-item *ngIf="!this.dService.validTicket">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </ion-item>
     </ion-card-content>
   </ion-card>
   <ion-fab slot="fixed" horizontal="end" vertical="bottom">

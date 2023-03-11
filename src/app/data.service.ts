@@ -10,6 +10,7 @@ export class DataService {
   carFound:any;
   carOwner: any;
   ticket: any;
+  validTicket: any;
 
   constructor(private db: AngularFireDatabase) { }
 
@@ -39,16 +40,27 @@ export class DataService {
         console.log("owner ",this.carOwner.email);
         
         this.findUserTicket(this.carOwner.uid);
-        //return carFound;
       }
       else{
-        console.log("No such vehicle in the databse!");
-        //return null; 
+        console.log("No such vehicle in the databse!"); 
       }   
     });
   }
 
   async findUserTicket(uid: any) {
-    this.db.object("users/"+uid+"/tickets/");
+    const date = new Date();
+    this.db.list("users/"+uid+"/tickets/").valueChanges().subscribe((res: any)=>{
+      for(let ticket of res){
+        const date2 = new Date(ticket.ticketEnd);
+        if(date2 > date){
+          this.validTicket = true;
+          console.log("Not Expired",ticket.ticketEnd);
+        }else{
+          this.validTicket = false;
+          console.log("Expired",ticket.ticketEnd);
+        }
+
+      } 
+    });
   }
 }
