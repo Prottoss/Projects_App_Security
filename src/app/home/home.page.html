@@ -6,27 +6,26 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <h3 *ngIf="imageService.images.length == 0">No images...</h3>
+<ion-content>
+  <ion-img src="assets/notfound.png" *ngIf="imageService.images.length == 0"/>
   <ion-list>
-    <ion-item-sliding *ngFor="let file of imageService.images;let i = index">
-      <ion-item>
-          <ion-img [src]="file.data"></ion-img>
-        <ion-button slot="end" fill="clear" (click)="imageService.sendImage(file)">
-          <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
-        </ion-button>
-      </ion-item>
-      
-      <ion-item-options>
-        <ion-item-option color="danger" (click)="imageService.deleteImage(file)">
-          <ion-icon slot="icon-only" name="trash"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+      <ion-item-sliding *ngFor="let file of imageService.images;let i = index">
+        <ion-item>
+            <ion-img [src]="file.data"></ion-img>
+          <ion-button slot="end" fill="clear" (click)="imageService.sendImage(file)">
+            <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+          </ion-button>
+        </ion-item>
+        
+        <ion-item-options>
+          <ion-item-option color="danger" (click)="imageService.deleteImage(file)">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
   </ion-list>
 
-  <ion-card *ngIf="this.dService.carFound==null">
-    <ion-icon name="close-circle-outline"></ion-icon>
+  <ion-card *ngIf="this.imageService.result && !this.dService.carFound">
     <ion-card-header>
       <ion-card-title>
         API: {{this.imageService.result}}
@@ -36,23 +35,21 @@
       Vehicle not found...
     </ion-card-content>
   </ion-card>
-  <ion-card *ngIf="this.dService.carFound!=null">
-    <ion-icon name="checkmark-circle-outline"></ion-icon>
+  <ion-card *ngIf="this.dService.carFound">
     <ion-card-header>
       <ion-card-title>
         API: {{this.imageService.result}}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Reg: {{this.dService.carFound}}
+      <ion-icon name="car-outline"></ion-icon> {{this.dService.carFound}}
       <br>
-      Owner:{{this.dService.carOwner.email}}
-      <ion-item *ngIf="this.dService.validTicket">
-        <ion-icon name="checkmark-circle-outline"></ion-icon>
-      </ion-item>
-      <ion-item *ngIf="!this.dService.validTicket">
-        <ion-icon name="close-circle-outline"></ion-icon>
-      </ion-item>
+      <ion-icon name="person-outline"></ion-icon> {{this.dService.carOwner.email}}
+      <ion-card-title>
+        <ion-icon name="ticket-outline"></ion-icon>
+        <ion-icon color="success" name="checkmark-circle-outline" *ngIf="this.dService.validTicket"></ion-icon>
+        <ion-icon color="danger" name="close-circle-outline" *ngIf="!this.dService.validTicket"></ion-icon>
+      </ion-card-title>
     </ion-card-content>
   </ion-card>
   <ion-fab slot="fixed" horizontal="end" vertical="bottom">

@@ -55,6 +55,7 @@ export class DataService {
         if(date2 > date){
           this.validTicket = true;
           console.log("Not Expired",ticket.ticketEnd);
+          break;
         }else{
           this.validTicket = false;
           console.log("Expired",ticket.ticketEnd);
