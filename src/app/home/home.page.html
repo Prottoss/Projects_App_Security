@@ -8,22 +8,23 @@
 
 <ion-content>
   <ion-img src="assets/notfound.png" *ngIf="imageService.images.length == 0"/>
-  <ion-list>
-      <ion-item-sliding *ngFor="let file of imageService.images;let i = index">
-        <ion-item>
-            <ion-img [src]="file.data"></ion-img>
-          <ion-button slot="end" fill="clear" (click)="imageService.sendImage(file)">
-            <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
-          </ion-button>
-        </ion-item>
-        
-        <ion-item-options>
-          <ion-item-option color="danger" (click)="imageService.deleteImage(file)">
-            <ion-icon slot="icon-only" name="trash"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-  </ion-list>
+
+  <ion-card *ngFor="let file of imageService.images">
+    <ion-item-sliding>
+      <ion-item>
+        <ion-img [src]="file.data"/>
+        <ion-button slot="end" fill="clear" (click)="imageService.sendImage(file)">
+          <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+        </ion-button>
+      </ion-item>
+      
+      <ion-item-options>
+        <ion-item-option color="danger" (click)="imageService.deleteImage(file)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-card>
 
   <ion-card *ngIf="this.imageService.result && !this.dService.carFound">
     <ion-card-header>
