@@ -79,12 +79,12 @@ export class ImageService {
     });
 
     if (image){
-      await this.saveImage(image);
+      this.saveImage(image);
     }
   }
 
   //saves image
-  async saveImage(photo:Photo)
+  async saveImage(photo: Photo)
   {
     const base64Data = await this.readAsBase64(photo);
     const fileName = new Date().getTime()+".jpeg";
