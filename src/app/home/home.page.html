@@ -11,7 +11,7 @@
 
   <ion-card *ngFor="let file of imageService.images">
     <ion-item-sliding>
-      <ion-item>
+      <ion-item lines="none">
         <ion-img [src]="file.data"/>
         <ion-button slot="end" fill="clear" (click)="imageService.sendImage(file)">
           <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
