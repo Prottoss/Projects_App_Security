@@ -121,10 +121,10 @@ export class ImageService {
       if(res){
         this.result = res.results[0]["plate"];
         this.dataService.findVehicleInDb(this.result);
-        setTimeout(()=>{
-          this.deleteImage(image);
-          this.result = null;
-        },3000);
+        // setTimeout(()=>{
+        //   this.deleteImage(image);
+        //   this.result = null;
+        // },3000);
       } 
     });
   }
@@ -135,6 +135,7 @@ export class ImageService {
       directory: Directory.Data,
       path: file.path
     });
+    this.result = null;
     this.loadFiles();
   }
 
