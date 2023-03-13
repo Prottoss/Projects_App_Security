@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.bigpp.projectSecurity',
   appName: 'Projects_App_Security',
   webDir: 'www',
   bundledWebRuntime: false
