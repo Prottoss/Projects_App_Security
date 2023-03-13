@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.bigpp.projectSecurity;
 
 import com.getcapacitor.BridgeActivity;
 
