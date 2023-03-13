@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.bigpp.projectSecurity',
-  appName: 'Projects_App_Security',
+  appId: 'com.bigpp.ParkITsecurity',
+  appName: 'ParkIT Security',
   webDir: 'www',
   bundledWebRuntime: false
 };

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Projects_App_Security</string>
-    <string name="title_activity_main">Projects_App_Security</string>
-    <string name="package_name">com.bigpp.projectSecurity</string>
-    <string name="custom_url_scheme">com.bigpp.projectSecurity</string>
+    <string name="app_name">ParkIT Security</string>
+    <string name="title_activity_main">ParkIT Security</string>
+    <string name="package_name">com.bigpp.ParkITsecurity</string>
+    <string name="custom_url_scheme">com.bigpp.ParkITsecurity</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.bigpp.projectSecurity;
+package com.bigpp.ParkITsecurity;
 
 import com.getcapacitor.BridgeActivity;
 
