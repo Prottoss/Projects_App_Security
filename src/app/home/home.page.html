@@ -36,7 +36,7 @@
       Vehicle not found...
     </ion-card-content>
   </ion-card>
-  <ion-card *ngIf="this.dService.carFound">
+  <ion-card *ngIf="this.imageService.result && this.dService.carFound">
     <ion-card-header>
       <ion-card-title>
         API: {{this.imageService.result}}

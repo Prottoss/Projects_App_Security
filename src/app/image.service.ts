@@ -120,8 +120,11 @@ export class ImageService {
       console.log(res);
       if(res){
         this.result = res.results[0]["plate"];
-       // this.deleteImage(image);
-        this.dataService.findVehicleInDb(this.result)
+        this.dataService.findVehicleInDb(this.result);
+        setTimeout(()=>{
+          this.deleteImage(image);
+          this.result = null;
+        },3000);
       } 
     });
   }
