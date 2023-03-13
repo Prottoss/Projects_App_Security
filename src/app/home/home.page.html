@@ -30,11 +30,14 @@
       <ion-icon name="car-outline"></ion-icon> {{this.dService.carFound}}
       <br>
       <ion-icon name="person-outline"></ion-icon> {{this.dService.carOwner.email}}
-      <ion-card-title>
-        <ion-icon name="ticket-outline"></ion-icon>
-        <ion-icon color="success" name="checkmark-circle-outline" *ngIf="this.dService.validTicket"></ion-icon>
-        <ion-icon color="danger" name="close-circle-outline" *ngIf="!this.dService.validTicket"></ion-icon>
-      </ion-card-title>
+    </ion-card-content>
+    <ion-card-content class="ticket" *ngIf="this.dService.validTicket">
+      Ticket found
+      <div class="checkmark" ></div>
+    </ion-card-content>
+    <ion-card-content class="ticket" *ngIf="!this.dService.validTicket">
+      Ticket not found
+      <div class="close black"></div>
     </ion-card-content>
   </ion-card>
 
