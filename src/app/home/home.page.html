@@ -9,19 +9,20 @@
 
 <ion-content>
   <ion-img class="parkit" src="assets/parkit.png" *ngIf="imageService.images.length == 0"/>
-
-  <ion-card *ngIf="this.imageService.result && !this.dService.carFound">
+  
+  <ion-card *ngIf="this.imageService.result && !this.dService.carFound" id="ticket">
     <ion-card-header>
       <ion-card-title>
         API: {{this.imageService.result}}
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      Vehicle not found...
+    <ion-card-content class="ticket">
+      Vehicle not found
+      <ion-icon class="cross" color="danger" name="close-outline"></ion-icon>
     </ion-card-content>
   </ion-card>
   
-  <ion-card *ngIf="this.imageService.result && this.dService.carFound">
+  <ion-card *ngIf="this.imageService.result && this.dService.carFound" id="ticket">
     <ion-card-header>
       <ion-card-title>
         API: {{this.imageService.result}}
@@ -34,11 +35,11 @@
     </ion-card-content>
     <ion-card-content class="ticket" *ngIf="this.dService.validTicket">
       Ticket found
-      <div class="checkmark" ></div>
+      <ion-icon class="check" color="success" name="checkmark-outline"></ion-icon>
     </ion-card-content>
     <ion-card-content class="ticket" *ngIf="!this.dService.validTicket">
       Ticket not found
-      <div class="close black"></div>
+      <ion-icon class="cross" color="danger" name="close-outline"></ion-icon>
     </ion-card-content>
   </ion-card>
 
@@ -58,15 +59,6 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-card>
-
-  <!-- <ion-card *ngFor="let file of imageService.images">
-      <ion-item lines="none">
-        <ion-img [src]="file.data"/>
-        <ion-button slot="end" fill="clear" (click)="imageService.sendImage(file)">
-          <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
-        </ion-button>
-      </ion-item>
-  </ion-card> -->
 
   <ion-fab slot="fixed" horizontal="end" vertical="bottom">
     <ion-fab-button (click)="imageService.captureImage()">
