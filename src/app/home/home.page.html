@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-img class="logo" slot="start" src="assets/pp.png"></ion-img>
+    <ion-img class="logo" slot="start" src="assets/ParkitLogo.png"></ion-img>
     <ion-title>
       ParkIT Security
     </ion-title>
@@ -8,9 +8,9 @@
 </ion-header>
 
 <ion-content>
-  <ion-img class="parkit" src="assets/parkit.png" *ngIf="imageService.images.length == 0"/>
+  <ion-img class="parkit" src="assets/ParkitTitle.png" *ngIf="imageService.images.length == 0"/>
   
-  <ion-card *ngIf="this.imageService.result && !this.dService.carFound" id="ticket">
+  <ion-card *ngIf="this.imageService.result && !this.dService.carFound">
     <ion-card-header>
       <ion-card-title>
         API: {{this.imageService.result}}
@@ -22,7 +22,7 @@
     </ion-card-content>
   </ion-card>
   
-  <ion-card *ngIf="this.imageService.result && this.dService.carFound" id="ticket">
+  <ion-card *ngIf="this.imageService.result && this.dService.carFound">
     <ion-card-header>
       <ion-card-title>
         API: {{this.imageService.result}}
